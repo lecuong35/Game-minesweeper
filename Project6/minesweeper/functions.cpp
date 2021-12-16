@@ -61,6 +61,10 @@ void init(short SRow, short SCol, short SMineCount)
 	Table.SMineCount = SMineCount;
 	Table.SOpenOCount = 0;
 	Table.SFlagCount = 0;
+	if (SRow == 9) Table.SSuggest = 2;
+	if (SRow == 16) Table.SSuggest = 5;
+	if (SRow == 24) Table.SSuggest = 12;
+
 
 	matrixCreate();
 	randomMineCreate();
@@ -124,6 +128,37 @@ void clickRight(short SX, short SY) // Cam co.
 
 	deleteRow(4, 1);
 	drawPlayGameStatus(1, 0, 0);
+}
+
+void suggest()
+{
+	if (Table.SSuggest > 0)
+	{
+		short i = 0;
+		short j = 0;
+		short size = Table.SCol;
+		bool BBreak = false;
+		for (i = 0; i < size; ++i) 
+		{
+			for (j = 0; j < size; ++j)
+			{
+				if (Box[i][j].BLandMine && !Box[i][j].BFlag && !Box[i][j].BOpened && BPlayGameStatus)
+				{
+					Box[i][j].BFlag = true;
+					Table.SFlagCount++;
+					drawTable();
+					deleteRow(4, 1);
+					drawPlayGameStatus(1, 0, 0);
+					BBreak = true;
+					//clickRight(i, j);
+					break;
+				}
+			}
+			if (BBreak) break;
+
+		}
+	}
+	Table.SSuggest--;
 }
 
 short neighborMineCount(short SX, short SY)
@@ -268,7 +303,7 @@ void lose()
 	AUDIO(IDR_WAVE3);
 }
 
-void playingContentSave()// luu diem cao
+void playingContentSave()
 {
 
 }
@@ -404,7 +439,7 @@ void keyboardProcessing(KEY_EVENT_RECORD key)
 		case VK_RETURN: // Phim Enter.
 			switch (SPages)
 			{
-			 case 1: // Menu chinh.
+			case 1: // Menu chinh.
 				if (SSelectLocation == 0)
 				{
 
@@ -432,7 +467,7 @@ void keyboardProcessing(KEY_EVENT_RECORD key)
 					exit(0);
 				}
 				break;
-			 case 2: // Menu chon cap do.
+			case 2: // Menu chon cap do.
 				if (SSelectLocation == 0) // Muc de 9 * 9 va 10 bom.
 				{
 					SPages = 3; // Cap nhat lai la dang choi game.
@@ -458,7 +493,7 @@ void keyboardProcessing(KEY_EVENT_RECORD key)
 					drawMainMenu(0);
 				}
 				break;
-			 case 4: // Trang thua.
+			case 4: // Trang thua.
 				if (SSelectLocation)
 				{
 					SPages = 1; // Tro ve menu chinh.
@@ -472,7 +507,7 @@ void keyboardProcessing(KEY_EVENT_RECORD key)
 					init(Table.SRow, Table.SCol, Table.SMineCount);
 				}
 				break;
-			 case 5: // Trang thang.
+			case 5: // Trang thang.
 
 				if (SSelectLocation)
 				{
@@ -489,7 +524,7 @@ void keyboardProcessing(KEY_EVENT_RECORD key)
 				}
 				break;
 
-			 case 6: // Trang luu lai.
+			case 6: // Trang luu lai.
 				if (SSelectLocation)
 				{
 					SPages = 1; // Tro ve menu chinh.
@@ -501,24 +536,24 @@ void keyboardProcessing(KEY_EVENT_RECORD key)
 					// Luu game -> Xu file.
 				}
 				break;
-			 case 7:
-				 if (SSelectLocation == 0)
-				 {
-					 SPages = 1;
-					 deleteRow(4, ConsoleHeight - 3);
-					 drawMainMenu(1);
-					 break;
-				 }
-				 break;
-			 case 8: 
-				 if (SSelectLocation == 0)
-				 {
-					 SPages = 1;
-					 deleteRow(4, ConsoleHeight - 3);
-					 drawMainMenu(1);
-					 break;
-				 }
-				 break;
+			case 7:
+				if (SSelectLocation == 0)
+				{
+					SPages = 1;
+					deleteRow(4, ConsoleHeight - 3);
+					drawMainMenu(1);
+					break;
+				}
+				break;
+			case 8:
+				if (SSelectLocation == 0)
+				{
+					SPages = 1;
+					deleteRow(4, ConsoleHeight - 3);
+					drawMainMenu(1);
+					break;
+				}
+				break;
 			}
 			break;
 
@@ -537,9 +572,11 @@ void keyboardProcessing(KEY_EVENT_RECORD key)
 				if (BPlayGameStatus)
 				{
 					BPlayGameStatus = false;
-					SPages = 6;
-					deleteRow(3, 2);
-					drawPlayGameStatus(1, 1, 0);
+					SPages = 1;
+					deleteRow(3, ConsoleHeight - 3);
+					//drawPlayGameStatus(1, 1, 0);
+					Table.STime = 0;
+					drawMainMenu(1);
 				}
 				break;
 			case 4: // Trang thua.
@@ -569,7 +606,7 @@ void keyboardProcessing(KEY_EVENT_RECORD key)
 				drawMainMenu(1);
 				break;
 			} break;
-		
+
 		case ClickLeft: // Phim Z - Mo O.
 			if (SPages == 3 && BPlayGameStatus)
 				clickLeft(CCurLocation.Y, CCurLocation.X);
@@ -577,6 +614,11 @@ void keyboardProcessing(KEY_EVENT_RECORD key)
 		case ClickRight: // Phim X - Cam Co.
 			if (SPages == 3 && BPlayGameStatus)
 				clickRight(CCurLocation.Y, CCurLocation.X);
+			break;
+
+		case Suggest: // phim S - goi y
+			if (SPages == 3 && BPlayGameStatus)
+				suggest();
 			break;
 		}
 	}
@@ -988,3 +1030,5 @@ void thongTin(short SIndex)
 	setBackgroundColorTextXY((ConsoleWidth / 2) - (strlen(StrTextHighScore) / 2), 25, 15, ((SIndex == 0) ? 2 : 0), StrTextHighScore);
 	
 }
+
+
