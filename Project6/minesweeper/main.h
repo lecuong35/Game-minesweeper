@@ -13,6 +13,9 @@
 
 #define ClickLeft 0x5A
 #define ClickRight 0x58
+#define Suggest 0x53
+
+
 
 struct TableStruct
 {
@@ -22,6 +25,7 @@ struct TableStruct
 	short SOpenOCount = 0; // So o da mo.
 	short SFlagCount = 0; // So co.
 	short STime = 0;
+	short SSuggest = 1;
 };
 
 struct BoxStruct

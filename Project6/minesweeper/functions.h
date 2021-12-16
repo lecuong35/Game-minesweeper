@@ -7,6 +7,7 @@ void eventProcessing(); // xuLySuKien
 void win(); // thang
 void lose(); // thua
 void luuDiem(); // luu diem khi thang
+void suggest();//goi y
 void drawHighScore(short SIndex);
 void thongTin(short SIndex);
 
