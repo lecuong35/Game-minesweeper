@@ -778,6 +778,7 @@ void drawPlayGameStatus(short SStatus, short SOptions, short SIndex)
 	setBackgroundColorTextXY(1, 3, 15, 0, (char*)"Ban Do: %d * %d", Table.SRow, Table.SCol);
 	setBackgroundColorTextXY(1, 4, 15, 0, (char*)"So Bom: %d", Table.SMineCount - Table.SFlagCount);
 	setBackgroundColorTextXY(ConsoleWidth - 15, 3, 15, 0, (char*)"Thoi Gian: %d", Table.STime);
+	setBackgroundColorTextXY(35, 3, 15, 0, (char*)"Goi Y: %d", Table.SSuggest);
 
 	// Ve menu thang thua.
 	LPSTR StrTextOptionMenu;
